@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web monitor sdk</title>
+</head>
+<body>
+    <div id="root">
+        <div class="content">
+            <input
+                id="errorBtn"
+                type="button"
+                value="点击抛出"
+                onclick="errorClick()"
+            >
+            <input
+                type="button"
+                class="promiseBtn"
+                value="点击抛出Promise错误"
+                onclick="promiseErrorClick()"
+            >
+            <input
+                id="xhrSuccessBtn"
+                type="button"
+                value="ajax成功请求"
+                onclick="sendSuccess()"
+            >
+            <input
+                id="xhrErrorBtn"
+                type="button"
+                value="ajax失败请求"
+                onclick="sendError()"
+            >
+            <button
+                id="clickMe"
+                onclick="clickMe()"
+            >
+                点我测试点击延迟
+            </button>
+        </div>
+    </div>
+    <script>
+        let contentEl = document.getElementsByClassName('content')[0]
+        function errorClick() {
+            // throw Error('test')
+            window.productInfo.name = 'KFC'
+        }
+        function promiseErrorClick(){
+          new Promise((resolve, reject) => {
+            // reject('promise reject')
+            window.productInfo.name = 'KFC'
+          }).then(res => {
+            conosle.log('promise..success', res)
+          })
+        }
+
+        function sendSuccess(){
+          let xhr = new XMLHttpRequest;
+          xhr.open('GET', '/success', true);
+          xhr.responseType = 'json';
+          xhr.onload = function(){
+            console.log('success..btn...click..onload', xhr.response)
+          }
+          xhr.send();
+        }
+
+        function sendError(){
+          let xhr = new XMLHttpRequest;
+          xhr.open('POST', '/error', true);
+          xhr.responseType = 'json';
+          xhr.onload = function(){
+            console.log('error..btn..click..onload', xhr.response)
+          }
+          xhr.onerror = function(err){
+            console.log('error...btn...click..onerror...', err)
+          }
+          xhr.send("name=sendError");
+        }
+
+        function clickMe(){
+          let start = Date.now();
+          while(Date.now() - start < 2000){}
+        }
+        document.addEventListener('DOMContentLoaded', function(){
+          let start = Date.now();
+          while(Date.now() - start < 2000){}
+        })
+
+        setTimeout(() => {
+          let h1 = document.createElement('h1')
+          h1.innerHTML = '我是页面中最有意义的内容'
+          h1.setAttribute('elementtiming', 'meaningful')
+          contentEl.appendChild(h1)
+        }, 2000)
+    </script>
+    <script src="notExistJs.js"></script>
+</body>
+
+
+</html>
